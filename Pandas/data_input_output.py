@@ -22,8 +22,8 @@ import pandas as pd
 ##########   Exercices   ##########
 
 df = pd.read_csv('/home/robert/Documents/PyThorch_Bootcamp/PYTORCH_NOTEBOOKS/00-Crash-Course-Topics/01-Crash-Course-Pandas/bank.csv')
-# print(df)
-
+print(df)
+# print(len(df))
 #TASK: Display the first 5 rows of the data set
 
 df_5 = df.iloc[:5]
@@ -50,6 +50,28 @@ unique_job = len(df['job'].unique())
 jobs = df['job'].value_counts()
 # print(jobs)
 
+# **TASK: What percent of people in the dataset were married? **
 
+married_people = df['marital'].value_counts()['married']/len(df)*100
+# print(married_people)
 
+# TASK: There is a column labeled "default". Use pandas' .map() method to create a new column called "default code"
+# which contains a 0 if there was no default, or a 1 if there was a default. Then show the head of the dataframe with
+# this new column.
+df['default code'] = df['default'].map({'no':0,'yes':1})
+# print(df)
 
+# TASK: What was the longest lasting duration?
+
+long_duration = df['duration'].max()
+# print(long_duration)
+
+# TASK: What is the most common education level for people who are unemployed?
+
+common_education = df['education'].value_counts()
+# print(common_education)
+
+# TASK: What is the average (mean) age for being unemployed?
+
+unemployed = df[df['job'] == 'unemployed']['age'].mean()
+print(unemployed)

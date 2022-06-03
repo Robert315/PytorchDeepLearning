@@ -44,3 +44,12 @@ rand_int = torch.randint(low=0, high=10, size=(5, 5))
 manual_seed = torch.manual_seed(42)  # keep the same values of a random tensor
 manual = torch.rand(2, 3)
 print(manual)
+
+
+
+############ Tensor Operations ############
+
+
+
+
+

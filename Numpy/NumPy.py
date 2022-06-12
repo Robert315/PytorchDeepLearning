@@ -1,5 +1,5 @@
 import numpy as np
-
+import torch
 # mylist = [1, 2, 3]
 # np.array(mylist)
 #
@@ -18,8 +18,8 @@ import numpy as np
 #
 # one_list = np.ones((5,5)) * 4
 # print(one_list)
-#
-# lin_space = np.linspace(0,10,100) # a list with 100 numbers between 0 to 10
+# #
+# lin_space = np.linspace(3,10) # a list with 100 numbers between 0 to 10
 # print(lin_space)
 #
 # eye_list = np.eye(5)
@@ -137,7 +137,7 @@ import numpy as np
 #  [16 17 18 19 20]
 #  [21 22 23 24 25]]
 
-matrix = np.arange(1,26).reshape(5,5)
+# matrix = np.arange(1,26).reshape(5,5)
 
 # # 13.
 # print(matrix[2:,1:])
@@ -155,3 +155,9 @@ matrix = np.arange(1,26).reshape(5,5)
 # print(matrix.std()) # standard deviation of the valules in matrix
 # # 20.
 # print(matrix.sum(axis=0))
+
+
+
+e = torch.randint(-8,9)
+print(e)
+

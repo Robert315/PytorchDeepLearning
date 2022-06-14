@@ -74,7 +74,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 #  After we set a Loss Funtions and we have a optimization, now we need to TRAINING the Model
 
-epochs = 100  # Set a reasonably large number of passes
+epochs = 50 # Set a reasonably large number of passes
 losses = []  # create a list to store loss values. This will let us view our prgress afterward
 
 for i in range(epochs):
@@ -89,7 +89,16 @@ for i in range(epochs):
     loss.backward()
     optimizer.step()
 
-plt.plot(range(epochs), losses)
-plt.ylabel('MSE LOSS')
-plt.xlabel('Epoch' )
-plot.show()
+w1,b1 = model.linear.weight.item(), model.linear.bias.item()
+print(f'Current weight: {w1:.8f}, Current bias: {b1:.8f}')
+print()
+
+y1 = x1*w1 + b1
+print(x1)
+print(y1)
+plt.scatter(X.numpy(), y.numpy())
+plt.plot(x1, y1, 'r')
+plt.title('Current Model')
+plt.ylabel('y')
+plt.xlabel('x')
+plt.show()

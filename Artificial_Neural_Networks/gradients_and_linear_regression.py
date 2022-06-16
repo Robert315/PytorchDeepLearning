@@ -75,7 +75,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 #  After we set a Loss Funtions and we have a optimization, now we need to TRAINING the Model
 
 epochs = 50 # Set a reasonably large number of passes
-losses = []  # create a list to store loss values. This will let us view our prgress afterward
+losses = []  # create a list to store loss values. This will let us view our progress afterward
 
 for i in range(epochs):
     i = i + 1

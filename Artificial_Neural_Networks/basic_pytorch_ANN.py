@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 
 
 class Model(nn.Module):
-    # to inheriting nn module
+    
     def __init__(self, in_features=4, h1=8, h2=9, out_features=3):
         # How many Layers?
-        super().__init__()
+        super().__init__()  # to inheriting nn module
         self.fc1 = nn.Linear(in_features, h1)  # input layer
         self.fc2 = nn.Linear(h1, h2)  # hidden layer
         self.out = nn.Linear(h2, out_features)  # output layer

@@ -13,7 +13,7 @@ class Model(nn.Module):
         self.fc1 = nn.Linear(in_features, h1)  # input layer
         self.fc2 = nn.Linear(h1, h2)  # hidden layer
         self.out = nn.Linear(h2, out_features)  # output layer
-        # fc1(fully connected layer
+        # fc1(fully connected layer)
         # Input Layer (4 features) --> Hidden Layer 1 --> Hidden Layer 2 --> output (3 classes)
 
     def forward(self, x):   # set our propagation method

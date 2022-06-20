@@ -45,13 +45,9 @@ for i, ax in enumerate(axes.flat):
 fig.legend(labels=labels, loc=3, bbox_to_anchor=(1.0, 0.85))
 # plt.show()
 
-X = df.drop('target', axis=1)
-y = df['target']
+X = df.drop('target', axis=1).values
+y = df['target'].values  # convert into a numpy array
 
-X = X.values  # convert into a numpy array
-y = y.values
-
-print(type(y))
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=33)
 X_train = torch.FloatTensor(X_train)

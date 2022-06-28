@@ -56,6 +56,10 @@ conts = torch.tensor(conts, dtype=torch.float)
 
 y = torch.tensor(df[y_col].values, dtype=torch.float)
 cat_sizes = [len(df[col].cat.categories) for col in cat_cols]
-print(cat_sizes)
+# print(cat_sizes)
 emb_sizes = [(size,min(50, (size+1) // 2)) for size in cat_sizes]
-print(emb_sizes)
+# print(emb_sizes)
+catz = cats[:4]
+selfembeds = nn.ModuleList([nn.Embedding(ni, nf) for ni, nf in emb_sizes])
+
+

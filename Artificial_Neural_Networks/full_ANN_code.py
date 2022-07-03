@@ -90,3 +90,71 @@ class TabularModel(nn.Module):
         self.emb_drop = nn.Dropout(p)
         # Set up a normalization function for the continuous variables with torch.nn.BatchNorm1d()
         self.bn_cont = nn.BatchNorm1d(n_cont)
+        # Set up a sequence of neural network layers where each level includes a Linear function, an activation function
+        # (we'll use ReLU), a normalization step, and a dropout layer. We'll combine the list of layers with torch.nn.Sequential()
+        layerlist = []
+        n_emb = sum(nf for ni, nf in emb_szs)
+        n_in = n_emb + n_cont
+
+        for i in layers:
+            layerlist.append(nn.Linear(n_in, i))
+            layerlist.append(nn.ReLU(inplace=True))
+            layerlist.append(nn.BatchNorm1d(i))
+            layerlist.append(nn.Dropout(p))
+            n_in = i
+        layerlist.append(nn.Linear(layers[-1], out_sz))
+        self.layers = nn.Sequential(*layerlist)
+
+    def forward(self, x_cat, x_cont):
+        embeddings = []
+        for i,e in enumerate(self.embeds):
+          embeddings.append(e(x_cat[:,i]))
+        x = torch.cat(embeddings, 1)
+        x = self.emb_drop(x)
+
+        x_cont = self.bn_cont(x_cont)
+        x = torch.cat([x, x_cont], 1)
+        x = self.layers(x)
+        return x
+
+torch.manual_seed(33)
+model = TabularModel(emb_szs, conts.shape[1], 1, [200, 100], p=0.4)
+print(model)
+criterion = nn.MSELoss
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+batch_size = 60000
+test_size = int(batch_size * .2)
+
+cat_train = cats[:batch_size-test_size]
+cat_test = cats[batch_size-test_size:batch_size]
+con_train = conts[:batch_size-test_size]
+con_test = conts[batch_size-test_size:batch_size]
+y_train = y[:batch_size-test_size]
+y_test = y[batch_size-test_size:batch_size]
+
+import time
+
+start_time = time.time()
+epochs = 300
+losses = []
+
+for i in range(epochs):
+    i += 1
+    y_pred = model(cat_train, con_train)
+    loss = torch.sqrt(criterion(y_pred, y_train)) # RMSE
+    losses.append(loss)
+
+    if i % 10 == 0:
+        print(f'epoch {i} loss is {loss}')
+
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+duration = time.time() - start_time
+print(f'Training took {duration/60} minutes')
+
+plt.plot(range(epochs, losses))
+plt.show()
+

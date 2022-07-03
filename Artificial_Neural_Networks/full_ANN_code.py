@@ -158,3 +158,4 @@ print(f'Training took {duration/60} minutes')
 plt.plot(range(epochs, losses))
 plt.show()
 
+

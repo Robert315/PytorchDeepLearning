@@ -155,7 +155,4 @@ for i in range(epochs):
 duration = time.time() - start_time
 print(f'Training took {duration/60} minutes')
 
-plt.plot(range(epochs, losses))
-plt.show()
-
 

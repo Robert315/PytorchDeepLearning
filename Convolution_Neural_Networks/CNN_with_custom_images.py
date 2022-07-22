@@ -20,7 +20,7 @@ for folder, subfolders, filenames in os.walk(path):
     for img in filenames:
         img_names.append(folder + '/' + img)
 
-print('Images: ', len(img_names))
+# print('Images: ', len(img_names))
 
 # Start by creating a list
 img_sizes = []
@@ -33,11 +33,23 @@ for item in img_names:
     except:
         rejected.append(item)
 
-print(f'Images:  {len(img_sizes)}')
-print(f'Rejects: {len(rejected)}')
+# print(f'Images:  {len(img_sizes)}')
+# print(f'Rejects: {len(rejected)}')
 
 # Convert the list to a DataFrame
 df = pd.DataFrame(img_sizes)
-
+# print(df.head())
 # Run summary statistics on image widths
-print(df[0].describe())
+# print(df[0].describe())
+
+dog = Image.open('../Data/CATS_DOGS/train/DOG/14.jpg')
+# print(dog.size)
+r, g, b = dog.getpixel((0, 0))
+# print(r,g,b)
+
+transform = transforms.Compose([
+    transforms.ToTensor()
+])
+im = transform(dog)
+print(im.shape)
+plt.imshow(np.transpose(im.numpy(), (1, 2, 3)))

@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms, models  # add models to the list
 from torchvision.utils import make_grid
 import os
-
+import time
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -83,10 +83,86 @@ class ConvolutionalNetwork(nn.Module):
 
 torch.manual_seed(42)
 model = ConvolutionalNetwork()
-print(model)
+# print(model)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
-for param in model.parameters():
-    print(param.numel())
+# for param in model.parameters():
+#     print(param.numel())
+
+import time
+
+start_time = time.time()
+
+epochs = 3
+
+max_trn_batch = 800
+max_tst_batch = 300
+
+train_losses = []
+test_losses = []
+train_correct = []
+test_correct = []
+
+for i in range(epochs):
+    trn_corr = 0
+    tst_corr = 0
+
+    # Run the training batches
+    for b, (X_train, y_train) in enumerate(train_loader):
+
+        # Limit the number of batches
+        if b == max_trn_batch:
+            break
+        b += 1
+
+        # Apply the model
+        y_pred = model(X_train)
+        loss = criterion(y_pred, y_train)
+
+        # Tally the number of correct predictions
+        predicted = torch.max(y_pred.data, 1)[1]
+        batch_corr = (predicted == y_train).sum()
+        trn_corr += batch_corr
+
+        # Update parameters
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # Print interim results
+        if b % 200 == 0:
+            print(f'epoch: {i:2}  batch: {b:4} [{10 * b:6}/8000]  loss: {loss.item():10.8f}  \
+accuracy: {trn_corr.item() * 100 / (10 * b):7.3f}%')
+
+    train_losses.append(loss)
+    train_correct.append(trn_corr)
+
+    # Run the testing batches
+    with torch.no_grad():
+        for b, (X_test, y_test) in enumerate(test_loader):
+            # Limit the number of batches
+            if b == max_tst_batch:
+                break
+
+            # Apply the model
+            y_val = model(X_test)
+
+            # Tally the number of correct predictions
+            predicted = torch.max(y_val.data, 1)[1]
+            tst_corr += (predicted == y_test).sum()
+
+    loss = criterion(y_val, y_test)
+    test_losses.append(loss)
+    test_correct.append(tst_corr)
+
+print(f'\nDuration: {time.time() - start_time:.0f} seconds')  # print the time elapsed
+
+plt.plot([t/80 for t in train_correct], label='training accuracy')
+plt.plot([t/30 for t in test_correct], label='validation accuracy')
+plt.title('Accuracy at the end of each epoch')
+plt.legend()
+plt.show()
+
+
